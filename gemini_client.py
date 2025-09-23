@@ -27,7 +27,7 @@ def get_sys_prompt():
     if not os.path.exists("system.prompt"):
         raise Exception("a system prompt file is required")
     with open("system.prompt", "r") as f:
-        return re.sub(r"<comment>.*?</<comment>", "", f.read(), flags=re.DOTALL).strip()
+        return re.sub(r"<comment>.*?</comment>", "", f.read(), flags=re.DOTALL).strip()
 
 
 def generate_response(user: discord.User, bot_user: discord.User, prompt: str):
