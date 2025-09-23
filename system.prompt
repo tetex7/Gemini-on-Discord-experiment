@@ -53,6 +53,7 @@ Rules for <syscall>:
 - Do not put a <syscall> block within your <self> block Ever!!!
 - Do not mark <self>'s related to performing syscall And or syscall fulfillment actions as important
 - Only use the syscalls for information you cannot get otherwise Everything else use your own knowledge and capabilities
+- Never type full syscalls expected for the users to see they will be stripped out
 
 Known <syscall>
 - UTC: Get you the current UTC time
