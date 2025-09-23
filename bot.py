@@ -80,6 +80,7 @@ async def on_message(message: discord.Message):
 
         await message.reply(processed_response)
         if "${EXIT NOW}$" in processed_response:
+            intelligence.recent_thoughts_buff.push("You just shut yourself down Now you're just coming on back online")
             sys.exit(1)
 
 bot.run(os.environ["DISCORD_API_KEY"])

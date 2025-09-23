@@ -29,7 +29,7 @@ def recent_talk(previous_messages: list[discord.Message]):
 
 
 def recent_thoughts():
-    return "\n\nrecent thoughts\n" + "".join([f"\"{thought}\"\n" for thought in recent_thoughts_buff.to_list()]) + "End of recent thoughts\n\n"
+    return "\n\n<recent_thoughts>\n" + "".join([f"\"{thought}\"\n" for thought in recent_thoughts_buff.to_list()]) + "</recent_thoughts>\n\n"
 
 
 def request_fulfillment_block():
