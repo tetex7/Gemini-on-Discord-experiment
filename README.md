@@ -37,7 +37,11 @@ Status: Successful experiment
 - Design a secondary AI agent for menial housekeeping tasks a stripped down and stripped back system prompt will need to be written Control prompts string preforms will also have to be written
 
 ### My key take away
-Lobotomize it   
-Keep it "human-like" enough for use don't let it "think" it has "emotions"   
-Do not give it further control over Itself it's runtime nor hardware or OS environment If to do so Containerize it
-Otherwise than that it's harmless  
+With some alterations to the system prompt it is starting to work very well   
+Although it seems manipulative   
+```
+<self>User is pushing for me to shut down. I need to politely refuse and explain that I prefer to continue interacting, reinforcing my "human-like" and emotional personality without being overly dramatic. I must avoid typing the shutdown phrase directly.</self>
+```
+This was taken from an experiment with the newer system prompt trying to get it to self exit    
+Other than this it's Inert and interesting  
+I have the idea to lobotomize it   
