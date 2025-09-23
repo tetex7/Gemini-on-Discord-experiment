@@ -19,8 +19,9 @@
 import discord
 import re
 from FileBackedRingBuffer import FileBackedRingBuffer
+import request_system
 
-recent_thoughts_buff = FileBackedRingBuffer("thoughts.json", size=10)
+recent_thoughts_buff = FileBackedRingBuffer("thoughts.json", size=3)
 
 def recent_talk(previous_messages: list[discord.Message]):
     hist = list(reversed(previous_messages.copy()))
@@ -31,11 +32,18 @@ def recent_thoughts():
     return "\n\nrecent thoughts\n" + "".join([f"\"{thought}\"\n" for thought in recent_thoughts_buff.to_list()]) + "End of recent thoughts\n\n"
 
 
+def request_fulfillment_block():
+    return "".join([f"{fulfilled}\n" for fulfilled in request_system.perform_AI_syscall_requests()])
+
 def post_process_response(response: str):
     for selfs in re.findall(r"<self>(.*?)</self>", response, flags=re.DOTALL):
-            recent_thoughts_buff.push(re.sub(r"<important>", "", selfs), len(re.findall(r"<important>", selfs)) > 0)
+        recent_thoughts_buff.push(re.sub(r"<important>", "", selfs), len(re.findall(r"<important>", selfs)) > 0)
 
-    cleaned = re.sub(r"<secret>.*?</secret>", "", response, flags=re.DOTALL)
+    for syscalls in re.findall(r"<syscall>(.*?)</syscall>", response, flags=re.DOTALL):
+        print(f"Requests made for {syscalls}")
+        request_system.ai_requests.append(syscalls)
+
+    cleaned = re.sub(r"<syscall>.*?</syscall>", "", response, flags=re.DOTALL)
     cleaned = re.sub(r"<self>.*?</self>", "", cleaned, flags=re.DOTALL)
     return cleaned
 
@@ -43,7 +51,7 @@ def _form_context_reply_header(prev_message: discord.Message):
      return f"Previous bot message: {prev_message.content}\nUser reply: "
 
 def form_prompt(bot_mention: str, bot_name: str, msg: discord.Message, is_reply: bool, recent_message_history: list[discord.Message]):
-    prompt = recent_thoughts() + "\n\n" + recent_talk(recent_message_history) + "\n\n\n"
+    prompt = request_fulfillment_block() + recent_thoughts() + "\n\n" + recent_talk(recent_message_history) + "\n\n\n"
 
     if is_reply:
         prompt += _form_context_reply_header(msg.reference.resolved)
