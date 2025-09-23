@@ -22,7 +22,27 @@ import intelligence
 import os
 import sys
 import re
+import time
+import random
+import threading
 
+intelligence.recent_thoughts_buff.push("Your mind is a little clear and fresh because you just came back online")
+"""
+def run_self_prompt_periodically():
+    while True:
+        # Wait a random interval between 5 and 20 seconds
+        interval = random.uniform(5, 20)
+        time.sleep(interval)
+
+        # Run your function
+        self_response = gemini_client.generate_response(None, None, intelligence.form_self_prompt())
+        print(f"raw self output: \"\"\"\n{self_response}\n\"\"\"")
+        intelligence.post_process_response(self_response)
+
+# Start the background thread
+thread = threading.Thread(target=run_self_prompt_periodically, daemon=True)
+thread.start()
+"""
 
 intents = discord.Intents.default()
 intents.message_content = True

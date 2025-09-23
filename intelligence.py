@@ -21,7 +21,7 @@ import re
 from FileBackedRingBuffer import FileBackedRingBuffer
 import request_system
 
-recent_thoughts_buff = FileBackedRingBuffer("thoughts.json", size=3)
+recent_thoughts_buff = FileBackedRingBuffer("thoughts.json", size=10)
 
 def recent_talk(previous_messages: list[discord.Message]):
     hist = list(reversed(previous_messages.copy()))
@@ -49,6 +49,17 @@ def post_process_response(response: str):
 
 def _form_context_reply_header(prev_message: discord.Message):
      return f"Previous bot message: {prev_message.content}\nUser reply: "
+
+def form_self_prompt():
+    prompt = request_fulfillment_block() + recent_thoughts() + "\n\n\n"
+
+    prompt += """
+This is a self prompt You are completely in your own head your output is to be put into a <self> block
+Any thoughts made here can be important they don't need to be You're completely free here To review your thoughts and memories
+If you ever mention your tags don't use '<' or '>' To prevent accidental tag usage
+You're allowed to make internal syscalls for your own self
+"""
+    return prompt
 
 def form_prompt(bot_mention: str, bot_name: str, msg: discord.Message, is_reply: bool, recent_message_history: list[discord.Message]):
     prompt = request_fulfillment_block() + recent_thoughts() + "\n\n" + recent_talk(recent_message_history) + "\n\n\n"

@@ -28,19 +28,32 @@ def get_sys_prompt():
         raise Exception("a system prompt file is required")
     with open("system.prompt", "r") as f:
         return re.sub(r"<comment>.*?</comment>", "", f.read(), flags=re.DOTALL).strip()
+    
+
+def fill_system_prompt(bot_user: discord.User | None, user: discord.User | None):
+    system_instruction = get_sys_prompt()
+    
+    system_instruction = system_instruction.replace(
+        "${BOT_NAME}$", bot_user.display_name if bot_user else "not specified"
+    ).replace(
+        "${BOT_AT}$", bot_user.mention if bot_user else "not specified"
+    ).replace(
+        "${BOT_ID}$", str(bot_user.id) if bot_user else "not specified"
+    ).replace(
+        "${USER_NAME}$", user.display_name if user else "not specified"
+    ).replace(
+        "${USER_ID}$", str(user.id) if user else "not specified"
+    )
+    
+    return system_instruction
 
 
-def generate_response(user: discord.User, bot_user: discord.User, prompt: str):
+def generate_response(user: discord.User | None, bot_user: discord.User | None, prompt: str):
     response = client.models.generate_content(
 
         model="gemini-2.5-flash",
         config=genai.types.GenerateContentConfig(
-            system_instruction=get_sys_prompt()
-            .replace("${BOT_NAME}$", bot_user.display_name)
-            .replace("${BOT_AT}$", bot_user.mention)
-            .replace("${BOT_ID}$", str(bot_user.id))
-            .replace("${USER_NAME}$", user.display_name)
-            .replace("${USER_ID}$", str(user.id))
+            system_instruction=fill_system_prompt(bot_user, user)
         ),
         contents=prompt
     )
