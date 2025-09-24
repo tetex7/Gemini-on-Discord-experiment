@@ -85,22 +85,25 @@ async def on_message(message: discord.Message):
 
         print(f"outbound prompt: \"\"\"\n{full_prompt}\n\"\"\"")
 
+        try:
+            async with message.channel.typing():
+                # Generate a response from Gemini
+                response = gemini_client.generate_response(
+                    message.author,
+                    bot.user,
+                    full_prompt
+                )
 
-        # Generate a response from Gemini
-        response = gemini_client.generate_response(
-            message.author,
-            bot.user,
-            full_prompt
-        )
-
-        print(f"raw output: \"\"\"\n{response}\n\"\"\"")
+                print(f"raw output: \"\"\"\n{response}\n\"\"\"")
 
 
-        processed_response = intelligence.post_process_response(response)
+                processed_response = intelligence.post_process_response(response)
 
-        await message.reply(processed_response)
-        if "${EXIT NOW}$" in processed_response:
-            intelligence.recent_thoughts_buff.push("You just shut yourself down Now you're just coming on back online")
-            sys.exit(1)
+                await message.reply(processed_response)
+                if "${EXIT NOW}$" in processed_response:
+                    intelligence.recent_thoughts_buff.push("You just shut yourself down Now you're just coming on back online")
+                    sys.exit(1)
+        except Exception as e:
+            await message.reply(f"```\n{e}\n```")
 
 bot.run(os.environ["DISCORD_API_KEY"])
