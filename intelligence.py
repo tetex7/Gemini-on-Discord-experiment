@@ -25,7 +25,7 @@ recent_thoughts_buff = FileBackedRingBuffer("thoughts.json", size=10)
 
 def recent_talk(previous_messages: list[discord.Message]):
     hist = list(reversed(previous_messages.copy()))
-    return "Recent messages before current user prompt\nYou may reference former history but do not recite verbatim\n" + "".join([f"{msg.author.display_name}@{msg.created_at}: \"{msg.content}\"\n" for msg in hist])
+    return "You may reference former history but do not recite verbatim\n<recent_discord_messages>\n" + "".join([f"{msg.author.display_name}({msg.author.id})@{msg.created_at}: \"{msg.content}\"\n" for msg in hist]) + "</recent_discord_messages>"
 
 
 def recent_thoughts():
@@ -48,7 +48,7 @@ def post_process_response(response: str):
     return cleaned
 
 def _form_context_reply_header(prev_message: discord.Message):
-    return f"Previous bot message: {prev_message.content}\nUser reply:"
+    return f"Previous bot message: {prev_message.content}\nUser reply: "
 
 def form_self_prompt():
     prompt = request_fulfillment_block() + recent_thoughts() + "\n\n\n"
@@ -67,7 +67,7 @@ def form_prompt(bot_mention: str, bot_name: str, msg: discord.Message, is_reply:
     if is_reply:
         prompt += _form_context_reply_header(msg.reference.resolved)
     else:
-        prompt += "User:"
+        prompt += "User: "
 
 
     prompt += msg.content.replace(bot_mention, bot_name).strip()
