@@ -48,7 +48,7 @@ def post_process_response(response: str):
     return cleaned
 
 def _form_context_reply_header(prev_message: discord.Message):
-     return f"Previous bot message: {prev_message.content}\nUser reply: "
+    return f"Previous bot message: {prev_message.content}\nUser reply:"
 
 def form_self_prompt():
     prompt = request_fulfillment_block() + recent_thoughts() + "\n\n\n"
@@ -66,6 +66,8 @@ def form_prompt(bot_mention: str, bot_name: str, msg: discord.Message, is_reply:
 
     if is_reply:
         prompt += _form_context_reply_header(msg.reference.resolved)
+    else:
+        prompt += "User:"
 
 
     prompt += msg.content.replace(bot_mention, bot_name).strip()
