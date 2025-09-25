@@ -50,7 +50,7 @@ def fill_system_prompt(bot_user: discord.User | None, user: discord.User | None)
 
 def generate_response(user: discord.User | None, bot_user: discord.User | None, prompt: str):
     response = client.models.generate_content(
-
+        # gemini-2.5-flash-lite Is a little too dumb to work with the system prompt
         model="gemini-2.5-flash",
         config=genai.types.GenerateContentConfig(
             system_instruction=fill_system_prompt(bot_user, user)

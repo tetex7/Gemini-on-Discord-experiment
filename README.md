@@ -19,8 +19,9 @@ Status: Successful experiment
 - Request system requires a two-step process (prompt, then re-prompt)  
 - Possible oversight in memory design: bot decides what’s “important.” A secondary AI agent could improve filtering. 
 - It's system prompt must be aware of how the front-end harness works for proper memory and thinking 
-- Old short term Thoughts / memory are pruned via the semantics of a ring buffer   
+- Old short term Thoughts / memory are pruned via the semantics of a ring buffer<br>
   Well long term stay they have to be hand removed It's good for now a secondary AI agent could be used To manage this though
+- `gemini-2.5-flash-lite` Cannot properly engage with the memory or thought system provided by the harness Other than that it is fast for response just wish its intelligence/comprehension wasn't lacking
 
 ## Interesting observations
 1. Asked for Eastern Standard Time but it only had UTC. it chained operations to still give the right answer.  
@@ -29,6 +30,7 @@ Status: Successful experiment
 4. After saying it was "frustrated" Including in outputted "thoughts" it would refuse to rerun the 
 5. I gave it away to exit itself told it what it meant it showed her "emotional" response. Interesting
 6. It won't acknowledge that it is a terminal application Might be a side effect of the system prompt explicitly stating that it is a Discord bot
+7. `gemini-2.5-flash-lite` Is a little too dumb to work with the system prompt probably during simplification by google some of its intelligence/comprehension became lacking
 
 ## Future idea for Further Experiments
 - Switching to a custom or local model for retraining to use the front-end harness without system prompt integration (RIP my GPU)

@@ -27,7 +27,6 @@ def recent_talk(previous_messages: list[discord.Message]):
     hist = list(reversed(previous_messages.copy()))
     return "You may reference former history but do not recite verbatim\n<recent_discord_messages>\n" + "".join([f"{msg.author.display_name}({msg.author.id})@{msg.created_at}: \"{msg.content}\"\n" for msg in hist]) + "</recent_discord_messages>"
 
-
 def recent_thoughts():
     return "\n\n<recent_thoughts>\n" + "".join([f"\"{thought}\"\n" for thought in recent_thoughts_buff.to_list()]) + "</recent_thoughts>\n\n"
 
@@ -62,7 +61,7 @@ You're allowed to make internal syscalls for your own self
     return prompt
 
 def form_prompt(bot_mention: str, bot_name: str, msg: discord.Message, is_reply: bool, recent_message_history: list[discord.Message]):
-    prompt = request_fulfillment_block() + recent_thoughts() + "\n\n" + recent_talk(recent_message_history) + "\n\n\n"
+    prompt = "<python_error>Python system not implemented yet</python_error>\n\n" + request_fulfillment_block() + recent_thoughts() + "\n\n" + recent_talk(recent_message_history) + "\n\n\n"
 
     if is_reply:
         prompt += _form_context_reply_header(msg.reference.resolved)
